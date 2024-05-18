@@ -1,0 +1,38 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.query-cpt--list {
+	ul {
+		padding-left: 0!important;
+
+		li {
+			display: flex;
+			flex-direction: row;
+			align-items: end;
+			min-height: 320px;
+			margin-bottom: 28px;
+			list-style: none;
+			border-radius: 12px;
+			overflow: hidden;
+
+			a {
+				text-decoration: none;
+			}
+
+			h3, p {
+				margin: 0;
+				color: white;
+			}
+
+			.query-list--item--footer {
+				width: 100%;
+				padding: 20px 40px;
+				background-color: #00000090;
+			}
+		}
+	}
+}
