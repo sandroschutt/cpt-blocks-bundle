@@ -1,0 +1,70 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.query-acf-fields {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+
+  .field-content {
+    width: 20%;
+    border-radius: 12px;
+
+    .field-image {
+      height: 192px;
+      width: 192px;
+      margin: 0 auto;
+      background-size: cover;
+	  background-position: center;
+	  background-color: lightgrey;
+      border-radius: 50%;
+    }
+
+    .field-footer {
+      text-align: center;
+
+      h5 {
+        margin: 12px auto;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 499px) {
+  .query-acf-fields {
+	width: 100%;
+
+    .field-content {
+      display: flex;
+	  flex-direction: column;
+	  justify-content: center;
+      width: 100%;
+      background-position: center;
+
+      .field-image {
+        width: 100%;
+        height: 364px;
+      }
+
+      .field-footer {
+        h5 {
+          font-size: 1.4em;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 700px) and (max-width: 1200px) {
+  .query-acf-fields {
+    .field-content {
+      max-width: 23%;
+      background-position: center;
+    }
+  }
+}

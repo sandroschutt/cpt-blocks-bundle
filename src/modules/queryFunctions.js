@@ -32,3 +32,17 @@ async function fetchImageList(postList, setMediaList, setAttributes) {
 			});
 	});
 }
+
+export async function fetchGlobalPostList(postType, setPostList, setMediaList, setAttributes) {
+	postType === "post" ? (postType = "posts") : (postType = postType);
+	await axios
+		.get(
+			`${window.location.origin}/wp-json/wp/v2/${postType}?_fields=id,title,link,featured_media&page=1&per_page=5`,
+		)
+		.then((response) => {
+			setPostList(response.data);
+			setAttributes({postsList: JSON.stringify(response.data)});
+            fetchImageList(response.data, setMediaList, setAttributes);
+		})
+		.catch((error) => console.error("Error fetching posts:", error));
+}

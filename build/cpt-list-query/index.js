@@ -265,6 +265,7 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   fetchGlobalPostList: () => (/* binding */ fetchGlobalPostList),
 /* harmony export */   fetchPostList: () => (/* binding */ fetchPostList)
 /* harmony export */ });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
@@ -293,6 +294,16 @@ async function fetchImageList(postList, setMediaList, setAttributes) {
       console.error("Error fetching media:", error.message);
     });
   });
+}
+async function fetchGlobalPostList(postType, setPostList, setMediaList, setAttributes) {
+  postType === "post" ? postType = "posts" : postType = postType;
+  await axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(`${window.location.origin}/wp-json/wp/v2/${postType}?_fields=id,title,link,featured_media&page=1&per_page=5`).then(response => {
+    setPostList(response.data);
+    setAttributes({
+      postsList: JSON.stringify(response.data)
+    });
+    fetchImageList(response.data, setMediaList, setAttributes);
+  }).catch(error => console.error("Error fetching posts:", error));
 }
 
 /***/ }),
