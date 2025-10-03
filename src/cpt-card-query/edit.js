@@ -35,87 +35,105 @@ import { Spinner } from "@wordpress/components";
 import { fetchPostList } from "../modules/queryFunctions";
 
 export default function Edit({ attributes, setAttributes }) {
-	const [postType, setPostType] = useState(attributes.postType);
-	const [postsPerPage, setPostsPerPage] = useState(attributes.postsPerPage);
-	const [postTypeChanged, setPostTypeChanged] = useState(false);
-	const [postList, setPostList] = useState(
-		attributes.postsList === "" ? [] : JSON.parse(attributes.postsList),
-	);
-	const [mediaList, setMediaList] = useState(JSON.parse(attributes.mediaList));
-	const [paginationChanged, setPaginationChanged] = useState(false);
+  const [postType, setPostType] = useState(attributes.postType);
+  const [postsPerPage, setPostsPerPage] = useState(attributes.postsPerPage);
+  const [postTypeChanged, setPostTypeChanged] = useState(false);
+  const [postList, setPostList] = useState(
+    attributes.postsList === "" ? [] : JSON.parse(attributes.postsList)
+  );
+  const [mediaList, setMediaList] = useState(JSON.parse(attributes.mediaList));
+  const [paginationChanged, setPaginationChanged] = useState(false);
 
-	useEffect(() => {
-		if (postList[0] === undefined) {
-			fetchPostList(postType, postsPerPage, setPostList, setMediaList, setAttributes)
-		}
+  useEffect(() => {
+    if (postList[0] === undefined) {
+      console.log("fetching post list");
+      fetchPostList(
+        postType,
+        postsPerPage,
+        setPostList,
+        setMediaList,
+        setAttributes
+      );
+    }
 
-		if (postTypeChanged === true || paginationChanged) {
-			fetchPostList(postType, postsPerPage, setPostList, setMediaList, setAttributes)
-			setPostTypeChanged(false);
-			setPaginationChanged(false);
-		}
-	}, [postList, postType, postTypeChanged, mediaList, paginationChanged]);
+    if (postTypeChanged === true || paginationChanged) {
+      console.log("post type changed");
+      fetchPostList(
+        postType,
+        postsPerPage,
+        setPostList,
+        setMediaList,
+        setAttributes
+      );
+      setPostTypeChanged(false);
+      setPaginationChanged(false);
+    }
+  }, [postList, postType, postTypeChanged, mediaList, paginationChanged]);
 
-	function isCardLoaded(excerpt, cardBgImage) {
-		if (cardBgImage === undefined) {
-			return (
-				<div className="loader">
-					<Spinner
-						style={{
-							height: "75px",
-							width: "75px",
-						}}
-					/>
-				</div>
-			);
-		} else {
-			return (
-				<>
-					<div className="card-content">{excerpt.substring(3, 156)}</div>
-				</>
-			);
-		}
-	}
+  function isCardLoaded(excerpt, cardBgImage) {
+    if (cardBgImage === undefined) {
+      return (
+        <div className="loader">
+          <Spinner
+            style={{
+              height: "75px",
+              width: "75px",
+            }}
+          />
+        </div>
+      );
+    } else {
+      return (
+        <>
+          <div className="card-content">{excerpt.substring(3, 156)}</div>
+        </>
+      );
+    }
+  }
 
-	return (
-		<div {...useBlockProps()}>
-			<QueryControls
-				att={{ attributes: attributes, setAttributes: setAttributes }}
-				type={{
-					postType: postType,
-					setPostType: setPostType,
-					postTypeChanged: postTypeChanged,
-					setPostTypeChanged: setPostTypeChanged,
-				}}
-				pagination={{
-					postsPerPage: postsPerPage,
-					setPostsPerPage: setPostsPerPage,
-					paginationChanged: paginationChanged,
-					setPaginationChanged: setPaginationChanged,
-				}}
-			/>
-			<div className="query-doctors">
-				{
-				postList.map((post, index) => {
-					return (
-						<div
-							className="doctor-card"
-							style={{
-								backgroundImage: `url(${mediaList[index]})`,
-								backgroundSize: "cover",
-								backgroundColor: "lightgrey",
-							}}
-						>
-							{isCardLoaded(post.excerpt.rendered, mediaList[index])}
-							<div className="card-footer">
-								<a href={post.link}>
-									<h5>{post.title.rendered}</h5>
-								</a>
-							</div>
-						</div>
-					);
-				})}
-			</div>
-		</div>
-	);
+  return (
+    <div {...useBlockProps()}>
+      <QueryControls
+        att={{ attributes: attributes, setAttributes: setAttributes }}
+        type={{
+          postType: postType,
+          setPostType: setPostType,
+          postTypeChanged: postTypeChanged,
+          setPostTypeChanged: setPostTypeChanged,
+        }}
+        pagination={{
+          postsPerPage: postsPerPage,
+          setPostsPerPage: setPostsPerPage,
+          paginationChanged: paginationChanged,
+          setPaginationChanged: setPaginationChanged,
+        }}
+      />
+      <div className="query-doctors">
+        {Array.isArray(postList) && postList.length > 0 ? (
+          postList.map((post, index) => (
+            <div
+              key={index}
+              className="doctor-card"
+              style={{
+                backgroundImage: `url(${mediaList[index]})`,
+                backgroundSize: "cover",
+                backgroundColor: "lightgrey",
+              }}
+            >
+              {post?.excerpt?.rendered && mediaList?.[index]
+                ? isCardLoaded(post.excerpt.rendered, mediaList[index])
+                : null}
+              <div className="card-footer">
+                <a href={post.link}>
+                  <h5>{post.title.rendered}</h5>
+                </a>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>No posts found.</p> // fallback message
+        )}
+      </div>
+    </div>
+  );
 }
