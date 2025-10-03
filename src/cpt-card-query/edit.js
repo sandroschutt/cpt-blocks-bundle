@@ -46,7 +46,6 @@ export default function Edit({ attributes, setAttributes }) {
 
   useEffect(() => {
     if (postList[0] === undefined) {
-      console.log("fetching post list");
       fetchPostList(
         postType,
         postsPerPage,
@@ -57,7 +56,6 @@ export default function Edit({ attributes, setAttributes }) {
     }
 
     if (postTypeChanged === true || paginationChanged) {
-      console.log("post type changed");
       fetchPostList(
         postType,
         postsPerPage,
@@ -82,13 +80,7 @@ export default function Edit({ attributes, setAttributes }) {
           />
         </div>
       );
-    } else {
-      return (
-        <>
-          <div className="card-content">{excerpt.substring(3, 156)}</div>
-        </>
-      );
-    }
+    } else return excerpt.substring(3, 156);
   }
 
   return (
@@ -120,9 +112,11 @@ export default function Edit({ attributes, setAttributes }) {
                 backgroundColor: "lightgrey",
               }}
             >
+			<div className="card-content">
               {post?.excerpt?.rendered && mediaList?.[index]
                 ? isCardLoaded(post.excerpt.rendered, mediaList[index])
                 : null}
+			</div>
               <div className="card-footer">
                 <a href={post.link}>
                   <h5>{post.title.rendered}</h5>
